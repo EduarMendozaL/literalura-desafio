@@ -51,4 +51,14 @@ public class Autor {
     public void setAnioFallecimiento(Integer anioFallecimiento) {
         this.anioFallecimiento = anioFallecimiento;
     }
+
+    @Override
+    public String toString() {
+        return "Autor{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", anioNacimiento=" + anioNacimiento +
+                ", anioFallecimiento=" + anioFallecimiento +
+                '}';
+    }
 }
