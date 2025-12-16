@@ -11,7 +11,7 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Libros_autores",
             joinColumns = @JoinColumn(name = "libro_id"),
@@ -67,5 +67,16 @@ public class Libro {
 
     public void setNumeroDeDescargas(Double numeroDeDescargas) {
         this.numeroDeDescargas = numeroDeDescargas;
+    }
+
+    @Override
+    public String toString() {
+        return "Libro{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", autores=" + autores +
+                ", idioma='" + idioma + '\'' +
+                ", numeroDeDescargas=" + numeroDeDescargas +
+                '}';
     }
 }
