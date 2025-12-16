@@ -127,7 +127,8 @@ public class Principal {
 
         libros.forEach(libro -> {
             System.out.println("Título: " + libro.getTitulo());
-            System.out.println("Autor: " + libro.getAutores());
+            System.out.println("Autor: ");
+            libro.getAutores().forEach(autor -> System.out.println(autor.getNombre()));
             System.out.println("Idioma: " + libro.getIdioma());
             System.out.println("Número de Descargas: " + libro.getNumeroDeDescargas());
             System.out.println("---------------------------");
