@@ -71,8 +71,8 @@ public class Principal {
         System.out.println("Ingrese el nombre o parte del título a buscar");
         var titulo = teclado.nextLine();
         var json = consumoApi.obtenerDatos(URL_BASE + titulo.replace(" ", "+"));
-        System.out.println("Será el json: " + json.length());
-        System.out.println("lo que contiene json: " + json);
+//        System.out.println("Será el json: " + json.length());
+//        System.out.println("lo que contiene json: " + json);
         Datos datos = convierteDatos.obtenerDatos(json, Datos.class);
 //        datos.resultados().forEach(libro -> {
 //            System.out.println("Título: " + libro.titulo());
