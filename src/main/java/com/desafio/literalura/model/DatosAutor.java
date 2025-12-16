@@ -1,10 +1,12 @@
 package com.desafio.literalura.model;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record DatosAutor(
-        String name,
-        int birth_year,
-        int death_year
+        @JsonAlias("name") String nombre,
+        @JsonAlias("birth_year") String fechaNacimiento,
+        @JsonAlias("death_year") String fechaDefuncion
 ) {
 }
