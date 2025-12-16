@@ -1,17 +1,34 @@
 package com.desafio.literalura.principal;
 
+import com.desafio.literalura.model.Autor;
 import com.desafio.literalura.model.Datos;
+import com.desafio.literalura.model.DatosLibro;
+import com.desafio.literalura.model.Libro;
+import com.desafio.literalura.repository.AutorRepository;
+import com.desafio.literalura.repository.LibroRepository;
 import com.desafio.literalura.service.ConsumoApi;
 import com.desafio.literalura.service.ConvierteDatos;
+import org.springframework.stereotype.Component;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class Principal {
     private Scanner teclado = new Scanner(System.in);
     private static final String URL_BASE = "https://gutendex.com/books/?search=";
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos convierteDatos = new ConvierteDatos();
+
+    private LibroRepository libroRepository;
+    private AutorRepository autorRepository;
+
+    public Principal(LibroRepository libroRepository,
+                     AutorRepository autorRepository) {
+        this.libroRepository = libroRepository;
+        this.autorRepository = autorRepository;
+    }
 
     public void muestraMenu() {
         var opcion = -1;
@@ -71,22 +88,37 @@ public class Principal {
         System.out.println("Ingrese el nombre o parte del título a buscar");
         var titulo = teclado.nextLine();
         var json = consumoApi.obtenerDatos(URL_BASE + titulo.replace(" ", "+"));
-//        System.out.println("Será el json: " + json.length());
-//        System.out.println("lo que contiene json: " + json);
         Datos datos = convierteDatos.obtenerDatos(json, Datos.class);
-//        datos.resultados().forEach(libro -> {
-//            System.out.println("Título: " + libro.titulo());
-//            System.out.println("Idiomas: " + libro.idiomas());
-//            System.out.println("Descargas: " + libro.numeroDeDescargas());
-//            System.out.println("Autores:");
-//            libro.autor().forEach(autor ->
-//                    System.out.println(" - " + autor.nombre())
-//            );
-//        });
-        datos.resultados().forEach(System.out::println);
+        var resultados = datos.resultados();
+
+        if (resultados == null || resultados.isEmpty()) {
+            System.out.println("No se encontraron libros con ese título");
+            return;
+        }
+
+        DatosLibro datoLibro = resultados.get(0);
+
+        if (libroRepository.existsByTitulo(datoLibro.titulo())) {
+            System.out.println("El libro ya está ingresado: " + datoLibro.titulo());
+            return;
+        }
+
+        Libro libro = new Libro(datoLibro);
+
+        List<Autor> autores = datoLibro.autor().stream()
+                .map(datosAutor -> autorRepository
+                        .findByNombre(datosAutor.nombre())
+                        .orElseGet(() -> autorRepository.save(new Autor(datosAutor))))
+                .toList();
+
+        libro.setAutores(autores);
+        libroRepository.save(libro);
+
+        System.out.println("Libro guardado: " + libro.getTitulo());
     }
 
     private void mostrarLibrosRegistrados() {
+
     }
 
     private void mostrarAutoresRegistrados() {
