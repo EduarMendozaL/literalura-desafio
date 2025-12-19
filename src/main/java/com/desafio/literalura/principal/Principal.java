@@ -136,6 +136,19 @@ public class Principal {
     }
 
     private void mostrarAutoresRegistrados() {
+        var autores = autorRepository.findAll();
+
+        if (autores.isEmpty()) {
+            System.out.println("No hay autores registrados");
+            return;
+        }
+
+        autores.forEach(autor -> {
+            System.out.println("Autor: " + autor.getNombre());
+            System.out.println("Año de Nacimiento: " + autor.getAnioNacimiento());
+            System.out.println("Año de Fallecimiento: " + autor.getAnioFallecimiento());
+            System.out.println("---------------------------");
+        });
     }
 
     private void mostrarAutoresPorAnio() {
