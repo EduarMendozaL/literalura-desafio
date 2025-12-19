@@ -152,6 +152,18 @@ public class Principal {
     }
 
     private void mostrarAutoresPorAnio() {
+        System.out.println("Ingrese el año para ver los autores");
+        Integer anio = teclado.nextInt();
+        teclado.nextLine();
+
+        var autores = autorRepository.autoresVivosEnAnio(anio);
+
+        if (autores.isEmpty()) {
+            System.out.println("No se encontraron autores vivos en ese año");
+            return;
+        }
+
+        autores.forEach(autor -> System.out.println("Autor: " + autor.getNombre()));
     }
 
     private void mostrarLibrosPorIdioma() {
