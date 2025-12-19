@@ -167,6 +167,17 @@ public class Principal {
     }
 
     private void mostrarLibrosPorIdioma() {
+        System.out.println("Ingrese el idioma (ej: es, en, fr)");
+        String idioma = teclado.nextLine();
+
+        var libros = libroRepository.findByIdiomaIgnoreCase(idioma);
+
+        if (libros.isEmpty()) {
+            System.out.println("No hay libros en ese idioma");
+            return;
+        }
+
+        libros.forEach(libro -> System.out.println("Título: " + libro.getTitulo()));
     }
 
 }
