@@ -52,10 +52,17 @@ src/main/java/com/desafio/literalura
 │ └── Principal.java
 ├── model
 │ ├── Autor.java
+│ ├── Datos.java
+│ ├── DatosAutor.java
+│ ├── DatosLibro.java
 │ └── Libro.java
 ├── repository
 │ ├── AutorRepository.java
 │ └── LibroRepository.java
+├── service
+│ ├── ConsumoApi.java
+│ ├── ConvierteDatos.java
+│ └── IConvierteDatos.java
 └── LiteraluraApplication.java
 ```
 ---
