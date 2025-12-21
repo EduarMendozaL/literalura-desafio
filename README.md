@@ -46,6 +46,7 @@ Con relación **OneToMany / ManyToOne**
 
 ## 🗂 Estructura básica del proyecto
 
+```
 src/main/java/com/desafio/literalura
 ├── principal
 │ └── Principal.java
@@ -56,20 +57,20 @@ src/main/java/com/desafio/literalura
 │ ├── AutorRepository.java
 │ └── LibroRepository.java
 └── LiteraluraApplication.java
-
+```
 ---
 
 ## 🛢 Configuración base de datos (application.properties)
 
 Ejemplo con PostgreSQL:
-
+```
 spring.datasource.url=jdbc:postgresql://localhost:5432/nombre_bd
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_password
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-
+```
 ---
 
 ## ▶ Ejecución
