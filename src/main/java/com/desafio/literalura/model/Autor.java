@@ -2,6 +2,8 @@ package com.desafio.literalura.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Autores")
 public class Autor {
@@ -11,6 +13,9 @@ public class Autor {
     private String nombre;
     private Integer anioNacimiento;
     private Integer anioFallecimiento;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Libro> libros;
 
     public Autor() {}
 
@@ -50,6 +55,14 @@ public class Autor {
 
     public void setAnioFallecimiento(Integer anioFallecimiento) {
         this.anioFallecimiento = anioFallecimiento;
+    }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
     }
 
     @Override
