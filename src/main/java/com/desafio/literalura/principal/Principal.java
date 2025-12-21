@@ -105,16 +105,26 @@ public class Principal {
 
         Libro libro = new Libro(datoLibro);
 
-        List<Autor> autores = datoLibro.autor().stream()
-                .map(datosAutor -> autorRepository
-                        .findByNombre(datosAutor.nombre())
-                        .orElseGet(() -> autorRepository.save(new Autor(datosAutor))))
-                .toList();
+        var datosAutor = datoLibro.autor().get(0);
+        Autor autor = autorRepository
+                .findByNombre(datosAutor.nombre())
+                .orElseGet(() -> {
+                    Autor nuevoAutor = new Autor(datosAutor);
+                    autorRepository.save(nuevoAutor);
+                    return nuevoAutor;
+                });
 
-        libro.setAutores(autores);
+        libro.setAutor(autor);
         libroRepository.save(libro);
 
-        System.out.println("Libro guardado: " + libro.getTitulo());
+        System.out.println("Libro guardado...");
+        System.out.println("----------LIBRO----------");
+        System.out.println("Título: " + libro.getTitulo());
+        System.out.println("Autor: " + libro.getAutor().getNombre());
+        System.out.println("Idioma: " + libro.getIdioma());
+        System.out.println("Número de Descargas: " + libro.getNumeroDeDescargas());
+        System.out.println("-------------------------");
+
     }
 
     private void mostrarLibrosRegistrados() {
@@ -126,12 +136,12 @@ public class Principal {
         }
 
         libros.forEach(libro -> {
+            System.out.println("----------LIBRO----------");
             System.out.println("Título: " + libro.getTitulo());
-            System.out.println("Autor: ");
-            libro.getAutores().forEach(autor -> System.out.println(autor.getNombre()));
+            System.out.println("Autor: " + libro.getAutor().getNombre());
             System.out.println("Idioma: " + libro.getIdioma());
             System.out.println("Número de Descargas: " + libro.getNumeroDeDescargas());
-            System.out.println("---------------------------");
+            System.out.println("-------------------------");
         });
     }
 
@@ -144,10 +154,15 @@ public class Principal {
         }
 
         autores.forEach(autor -> {
+            System.out.println("----------AUTOR----------");
             System.out.println("Autor: " + autor.getNombre());
             System.out.println("Año de Nacimiento: " + autor.getAnioNacimiento());
             System.out.println("Año de Fallecimiento: " + autor.getAnioFallecimiento());
-            System.out.println("---------------------------");
+            var titulos = autor.getLibros().stream()
+                    .map(Libro::getTitulo)
+                    .toList();
+            System.out.println("Libros: " + titulos);
+            System.out.println("-------------------------");
         });
     }
 
@@ -163,11 +178,29 @@ public class Principal {
             return;
         }
 
-        autores.forEach(autor -> System.out.println("Autor: " + autor.getNombre()));
+        autores.forEach(autor -> {
+            System.out.println("----------AUTOR----------");
+            System.out.println("Autor: " + autor.getNombre());
+            System.out.println("Año de Nacimiento: " + autor.getAnioNacimiento());
+            System.out.println("Año de Fallecimiento: " + autor.getAnioFallecimiento());
+            var titulos = autor.getLibros().stream()
+                    .map(Libro::getTitulo)
+                    .toList();
+            System.out.println("Libros: " + titulos);
+            System.out.println("-------------------------");
+        });
     }
 
     private void mostrarLibrosPorIdioma() {
-        System.out.println("Ingrese el idioma (ej: es, en, fr)");
+        System.out.println("""
+                es - Español
+                en - Inglés
+                fr - Francés
+                it - Italiano
+                de - Alemán
+                
+                Ingrese el idioma a buscar:
+                """);
         String idioma = teclado.nextLine();
 
         var libros = libroRepository.findByIdiomaIgnoreCase(idioma);
@@ -177,7 +210,13 @@ public class Principal {
             return;
         }
 
-        libros.forEach(libro -> System.out.println("Título: " + libro.getTitulo()));
+        libros.forEach(libro -> {
+            System.out.println("----------LIBRO----------");
+            System.out.println("Título: " + libro.getTitulo());
+            System.out.println("Autor: " + libro.getAutor().getNombre());
+            System.out.println("Idioma: " + libro.getIdioma());
+            System.out.println("Número de Descargas: " + libro.getNumeroDeDescargas());
+            System.out.println("-------------------------");
+        });
     }
-
 }
